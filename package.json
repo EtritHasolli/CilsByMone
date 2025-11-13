@@ -1,0 +1,14 @@
+{
+  "name": "cils-by-mone-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
+
