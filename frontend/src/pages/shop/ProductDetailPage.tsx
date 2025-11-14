@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { api } from '../../lib/api';
 import type { Product } from '../../types/product';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { formatImageUrl } from '../../utils/imageUrl';
 import { useUIStore } from '../../store/uiStore';
 import { ProductCard } from '../../components/common/ProductCard';
 import { useCartStore } from '../../store/cartStore';
@@ -173,21 +174,26 @@ export function ProductDetailPage() {
       <section className="container grid gap-12 lg:grid-cols-[1.1fr,1fr]">
         <div className="grid gap-4 lg:grid-cols-[100px,1fr]">
           <div className="flex gap-3 lg:flex-col">
-            {product.product_images?.map((image) => (
+            {product.product_images?.map((image, index) => (
               <img
                 key={image.id}
-                src={`${image.image_url}&w=200&auto=format`}
+                src={formatImageUrl(image.image_url, 150, { auto: 'format' })}
                 alt={image.alt_text ?? product.name}
                 className="h-20 w-20 rounded-xl object-cover shadow-soft lg:w-full"
+                loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
               />
             ))}
           </div>
           <div className="overflow-hidden rounded-3xl bg-white shadow-soft">
             {primaryImage ? (
               <img
-                src={`${primaryImage.image_url}&w=900&auto=format`}
+                src={formatImageUrl(primaryImage.image_url, 800, { auto: 'format' })}
                 alt={primaryImage.alt_text ?? product.name}
                 className="h-full w-full object-cover"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
               />
             ) : (
               <div className="flex h-full items-center justify-center p-10 text-sm text-surface-dark/60">

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronsUpDown } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -22,18 +21,18 @@ export function CurrencySelector() {
   const currency = useUIStore((state) => state.currency);
   const setCurrency = useUIStore((state) => state.setCurrency);
 
-  const { data, refetch } = useQuery({
+  // Only fetch currency rates when needed (lazy loading)
+  // React Query will automatically refetch when currency changes due to queryKey
+  const { data } = useQuery({
     queryKey: ['currency', currency],
     queryFn: async () => {
       const response = await api.get<RatesResponse>('/currency/rates', { params: { base: currency } });
       return response.data;
     },
-    staleTime: 1000 * 60 * 60,
+    staleTime: 1000 * 60 * 60, // 1 hour - currency rates don't change often
+    gcTime: 1000 * 60 * 60 * 24, // 24 hours - keep in cache (formerly cacheTime)
+    refetchOnMount: false, // Don't refetch if we have cached data
   });
-
-  useEffect(() => {
-    refetch();
-  }, [currency, refetch]);
 
   return (
     <div className="relative">
@@ -71,11 +70,11 @@ export function CurrencySelector() {
         </AnimatePresence>
       </details>
 
-      {data && (
+      {/* {data && (
         <p className="mt-1 text-[10px] uppercase tracking-wide text-surface-dark/50">
           Updated {new Date(data.updatedAt).toLocaleDateString()}
         </p>
-      )}
+      )} */}
     </div>
   );
 }

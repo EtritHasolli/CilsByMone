@@ -8,7 +8,7 @@ const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/shop', label: 'Shop' },
   { to: '/services', label: 'Services' },
-  { to: '/blog', label: 'Blog' },
+  // { to: '/blog', label: 'Blog' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ];
@@ -79,12 +79,7 @@ export function Header() {
             <User className="h-4 w-4" />
             Account
           </Link>
-          <button
-            className="rounded-full p-2 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-            aria-label="Search"
-          >
-            <Search className="h-5 w-5" />
-          </button>
+    
           <Link
             to="/cart"
             className="relative rounded-full p-2 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"

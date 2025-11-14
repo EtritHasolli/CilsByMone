@@ -55,7 +55,7 @@ export function BlogIndexPage() {
           <div className="space-y-6">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-dark">Latest Articles</h3>
             <div className="space-y-4">
-              {rest?.map((post) => (
+              {/* {rest?.map((post) => (
                 <Link
                   key={post.id}
                   to={`/blog/${post.slug}`}
@@ -76,7 +76,7 @@ export function BlogIndexPage() {
                     <p className="mt-1 text-xs text-surface-dark/60 line-clamp-2">{post.excerpt}</p>
                   </div>
                 </Link>
-              ))}
+              ))} */}
               {isLoading && <p className="text-sm text-surface-dark/60">Loading articles…</p>}
             </div>
           </div>

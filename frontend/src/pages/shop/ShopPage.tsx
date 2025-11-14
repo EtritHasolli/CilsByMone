@@ -70,6 +70,9 @@ export function ShopPage() {
       });
       return response.data;
     },
+    staleTime: 1000 * 60 * 2, // 2 minutes - products don't change that often
+    gcTime: 1000 * 60 * 10, // 10 minutes - keep in cache (formerly cacheTime)
+    refetchOnMount: false, // Don't refetch if we have cached data
   });
 
   const products = useMemo(() => {
@@ -114,6 +117,8 @@ export function ShopPage() {
                   src={`${category.image}&sat=-25`}
                   alt={category.label}
                   className="h-52 w-full object-cover transition duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/70 via-surface-dark/10 to-transparent" />
                 <span className="absolute inset-0 flex items-center justify-center font-display text-xl uppercase tracking-[0.5em] text-white">
@@ -238,15 +243,15 @@ export function ShopPage() {
             </div>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {isLoading && <p className="text-sm text-surface-dark/60">Produkte werden geladen…</p>}
             {!isLoading && products.length === 0 && (
               <p className="col-span-full text-sm text-surface-dark/60">
                 Keine Produkte gefunden. Passen Sie Ihre Filter an.
               </p>
             )}
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {products.map((product, index) => (
+              <ProductCard key={product.id} product={product} priority={index < 6} />
             ))}
           </div>
         </section>

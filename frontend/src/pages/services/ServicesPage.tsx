@@ -40,7 +40,7 @@ export function ServicesPage() {
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {isLoading && <p className="text-sm text-surface-dark/60">Loading services…</p>}
-          {data?.map((service) => (
+          {/* {data?.map((service) => (
             <article key={service.id} className="flex flex-col overflow-hidden rounded-3xl bg-white shadow-soft">
               {service.image_url && (
                 <img
@@ -76,7 +76,7 @@ export function ServicesPage() {
                 </Link>
               </div>
             </article>
-          ))}
+          ))} */}
         </div>
       </section>
     </div>

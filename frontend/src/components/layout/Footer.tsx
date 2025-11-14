@@ -46,11 +46,11 @@ export function Footer() {
         </div>
         <div>
           <h4 className="text-sm font-semibold uppercase tracking-wide text-brand-light">Customer Care</h4>
-          <nav className="mt-4 flex flex-col gap-2 text-sm text-white/80">
-            <Link to="/faq">FAQ</Link>
-            <Link to="/shipping">Shipping & Returns</Link>
-            <Link to="/terms">Terms of Service</Link>
-            <Link to="/privacy">Privacy Policy</Link>
+          <nav className="mt-4 flex flex-col gap-2 text-sm text-!white">
+            <Link to="/faq" className="text-white/80">FAQ</Link>
+            <Link to="/shipping" className="text-white/80">Shipping & Returns</Link>
+            <Link to="/terms" className="text-white/80">Terms of Service</Link>
+            <Link to="/privacy" className="text-white/80">Privacy Policy</Link>
           </nav>
         </div>
         <div>
