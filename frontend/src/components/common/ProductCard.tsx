@@ -4,6 +4,7 @@ import type { Product } from '../../types/product';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { formatImageUrl } from '../../utils/imageUrl';
 import { useUIStore } from '../../store/uiStore';
+import { getLocalProductImage } from '../../utils/productImages';
 
 type ProductCardProps = {
   product: Product;
@@ -24,16 +25,23 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
+  // Prefer local brand imagery from src/images based on product slug (thumbnail usage on list pages).
+  // If there's no mapped local image, fall back to a lower-width remote image URL from the database.
+  const localImageSrc = getLocalProductImage(product.slug);
+  const dbImageSrc =
+    primaryImage && formatImageUrl(primaryImage.image_url, 400, { auto: 'format' });
+  const imageSrc = localImageSrc ?? dbImageSrc;
+
   return (
     <Link to={`/shop/${product.slug}`} className="group flex flex-col overflow-hidden rounded-[28px] bg-white shadow-soft">
       <div className="relative h-60 w-full overflow-hidden bg-surface-muted">
         {!imageLoaded && !imageError && (
           <div className="absolute inset-0 animate-pulse bg-surface-dark/10" />
         )}
-        {primaryImage && !imageError ? (
+        {imageSrc && !imageError ? (
           <img
-            src={formatImageUrl(primaryImage.image_url, 400, { auto: 'format' })}
-            alt={primaryImage.alt_text ?? product.name}
+            src={imageSrc}
+            alt={primaryImage?.alt_text ?? product.name}
             loading={priority ? 'eager' : 'lazy'}
             fetchPriority={priority ? 'high' : 'auto'}
             decoding="async"

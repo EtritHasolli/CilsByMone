@@ -9,6 +9,7 @@ import { useUIStore } from '../../store/uiStore';
 import { ProductCard } from '../../components/common/ProductCard';
 import { useCartStore } from '../../store/cartStore';
 import { QuantitySelector } from '../../components/ui/QuantitySelector';
+import { getLocalProductImage } from '../../utils/productImages';
 
 type RelatedProduct = Product;
 
@@ -156,6 +157,15 @@ export function ProductDetailPage() {
   }
 
   const primaryImage = product.product_images?.sort((a, b) => a.display_order - b.display_order)[0];
+  const localImageSrc = getLocalProductImage(product.slug);
+
+  // Thumbnail-sized image for the gallery – use local image if available, otherwise smaller remote image.
+  const getThumbSrc = (imageUrl: string) =>
+    localImageSrc ?? formatImageUrl(imageUrl, 300, { auto: 'format' });
+
+  // Full-resolution main image for the detail view – prefer local image, otherwise higher-width remote image.
+  const mainImageSrc =
+    localImageSrc ?? (primaryImage && formatImageUrl(primaryImage.image_url, 1200, { auto: 'format' }));
 
   return (
     <div className="pb-16">
@@ -177,7 +187,7 @@ export function ProductDetailPage() {
             {product.product_images?.map((image, index) => (
               <img
                 key={image.id}
-                src={formatImageUrl(image.image_url, 150, { auto: 'format' })}
+                src={getThumbSrc(image.image_url)}
                 alt={image.alt_text ?? product.name}
                 className="h-20 w-20 rounded-xl object-cover shadow-soft lg:w-full"
                 loading={index === 0 ? 'eager' : 'lazy'}
@@ -186,10 +196,10 @@ export function ProductDetailPage() {
             ))}
           </div>
           <div className="overflow-hidden rounded-3xl bg-white shadow-soft">
-            {primaryImage ? (
+            {primaryImage || localImageSrc ? (
               <img
-                src={formatImageUrl(primaryImage.image_url, 800, { auto: 'format' })}
-                alt={primaryImage.alt_text ?? product.name}
+                src={mainImageSrc ?? ''}
+                alt={primaryImage?.alt_text ?? product.name}
                 className="h-full w-full object-cover"
                 loading="eager"
                 fetchPriority="high"
